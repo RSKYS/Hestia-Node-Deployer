@@ -33,7 +33,7 @@ mkdir -p /usr/local/hestia/data/templates/web/nginx
 
 ( cd /usr/local/hestia/data/templates/web/nginx # The Start
 
-rm -f node-*.*
+# rm -f node-*.*
 cat > "node-$Port.tpl" <<TPL
 server {
         listen %ip%:%proxy_port%;
