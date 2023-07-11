@@ -22,18 +22,69 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+show_help() {
+    echo -e "\n  Usage: node-generator.sh [options]\n\
+    Options:\n\
+    --help, -h              Display the help message\n\
+    --add, add <number>     Add Hestia node templates for the specified port\n\
+    --remove, rm <number>   Remove previously generated Hestia templates for the port\n"
+}
+
+#Check user privilege
 if [[ $(id -u) != "0" ]]; then
 	echo "Script needs to run under superuser."
 	exit 1
 fi
 
-# Check
-read -r -p "Enter the port: " Port
 mkdir -p /usr/local/hestia/data/templates/web/nginx
+
+#On command
+case "$1" in
+"")
+        read -r -p "Enter the port: " Port
+        if [[ ! "$Port" =~ ^[0-9]+$ ]]; then
+               echo -e "\n    Please provide a valid port number.\n" 
+               exit 1
+        fi
+;;
+
+add | --add)
+        shift
+        if [[ "$1" && "$1" =~ ^[0-9]+$ ]]; then
+                Port=$((Port + $1))
+        else
+                echo -e "\n    Please provide a valid port number with $1 option.\n"
+                exit 1
+        fi
+;;
+
+rm | --remove)
+        shift
+        if [[ "$1" && "$1" =~ ^[0-9]+$ ]]; then
+                Port=$((Port + $1))
+                ( cd /usr/local/hestia/data/templates/web/nginx
+                  rm -f node-$Port.* )
+                exit 0
+        else
+                echo -e "\n    Please provide a valid port number with $1 option.\n"
+                exit 1
+        fi
+;;
+
+-h | --help)
+        show_help
+        exit 0
+;;
+
+*)
+        echo -e "\n    Unknown option \"$1\"\n\
+    Write --help for more information.\n"
+        exit 1
+;;
+esac
 
 ( cd /usr/local/hestia/data/templates/web/nginx # The Start
 
-# rm -f node-*.*
 cat > "node-$Port.tpl" <<TPL
 server {
         listen %ip%:%proxy_port%;

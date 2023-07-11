@@ -1,8 +1,8 @@
-## NodeJS Hestia Deployer
+## Hestia Node Deployer
 
-This script makes ready Hestia config files for our web service use case. \
+This script makes Hestia template files for our web service to use. \
 Deploy as easy as just one single command:
-```
-curl https://raw.githubusercontent.com/RSKYS/Hestia-NodeJS-Deployer/master/node-generator.sh | sudo bash
-```
 
+```
+wget --no-check-certificate https://raw.githubusercontent.com/RSKYS/Hestia-Node-Deployer/master/node-generator.sh && sudo ./node-generator.sh
+```
