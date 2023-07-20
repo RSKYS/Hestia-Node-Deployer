@@ -36,6 +36,12 @@ if [[ $(id -u) != "0" ]]; then
 	exit 1
 fi
 
+if [[ ! -d "/usr/local/hestia" ]]; then
+    echo -e "\n    Can't find Hestia install..\n\
+    Is Hestia installed?\n"
+    exit 1
+fi
+
 mkdir -p /usr/local/hestia/data/templates/web/nginx
 
 #On command
